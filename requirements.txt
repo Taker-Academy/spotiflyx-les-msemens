@@ -1,0 +1,9 @@
+Flask
+pymongo
+fastapi
+Flask
+Flask-Cors
+PyJWT
+python-dotenv
+Peewee
+SQLAlchemy
