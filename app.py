@@ -10,7 +10,7 @@ import os
 from peewee import SqliteDatabase
 from peewee import Model, CharField, IntegerField
 app = Flask(__name__)
-CORS(app, origins="http://localhost:8080")
+CORS(app)
 app.config['SECRET_KEY'] = "ouioui"
 db = SqliteDatabase('test.db')
 
@@ -39,7 +39,7 @@ def get_item(item_id):
     else:
         return jsonify({'error': 'Utilisateur non trouvé'}), 404
 
-@app.route('/auth/register', methods=['POST'])
+@app.route('/register', methods=['POST'])
 def add_item():
     data = request.json
     if not data:

@@ -2,21 +2,21 @@
     <div class="footer">
         <div class="row">
             <h2>A propos</h2>
-            <a href="#">Fonctionnement du site</a>
-            <a href="#">Conditions générales de vente</a>
-            <a href="#">Données et confidentialité</a>
+            <h4 href="#">Fonctionnement du site</h4>
+            <h4 href="#">Conditions générales de vente</h4>
+            <h4 href="#">Données et confidentialité</h4>
         </div>
         <div class="row">
             <h2>Assistance</h2>
-            <a href="#">Centre d'aide</a>
-            <a href="#">Nous contacter</a>
+            <h4>Centre d'aide</h4>
+            <h4 href="#">Nous contacter</h4>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-  name: 'PageFooter'
+  name: 'Footer'
 }
 </script>
 
@@ -26,16 +26,17 @@ export default {
         display: flex;
         justify-content: space-around;
         padding: 4rem;
-        color: #fff;
+        color: black;
     }
     .row {
         display: flex;
         flex-direction: column;
     }
-    .row a {
+    .row h4 {
         text-decoration: none;
-        color: #fff;
         padding: 0.5rem 0;
+        font-weight: 400;
+        margin: 0;
         font-size: 19px;
     }
 </style>

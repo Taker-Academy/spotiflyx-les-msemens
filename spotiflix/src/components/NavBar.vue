@@ -1,7 +1,16 @@
 <template>
     <div class="navbar">
-      <img class="logo" src="../assets/spotiflix-logo.png" alt="logo-spotiflix">
-      <button class="login">Login</button>
+      <router-link to="/">
+        <img class="logo" src="@/assets/logo.png" alt="logo-spotiflix">
+      </router-link>
+      <account>
+        <router-link to="/login">
+          <button class="login">Sign in</button>
+        </router-link>
+        <router-link to="/register">
+          <button class="login">Register</button>
+        </router-link>
+      </account>
     </div>
 </template>
 
@@ -17,10 +26,11 @@ export default {
     display: flex;
     width: auto;
     align-items: center;
+    padding: 0px 2rem;
     justify-content: space-between;
   }
   .logo {
-    width: 15vh;
+    width: 10rem;
     margin: 0px 30px;
   }
   .login {
@@ -31,6 +41,6 @@ export default {
     font-size: 16.5px;
     font-weight: 600;
     border: 2px solid grey;
-    margin: 0px 3rem;
+    margin: 0px 1rem;
   }
 </style>
