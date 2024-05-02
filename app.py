@@ -7,14 +7,10 @@ import jwt
 from bson.json_util import dumps
 from dotenv import load_dotenv
 import os
-from database import session
-from models import User
 from peewee import SqliteDatabase
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 from peewee import Model, CharField, IntegerField
 app = Flask(__name__)
-CORS(app, origins="http://localhost:3000")
+# CORS(app, origins="http://localhost:3000")
 app.config['SECRET_KEY'] = "ouioui"
 db = SqliteDatabase('test.db')
 
@@ -204,4 +200,4 @@ def delete_profile():
         return jsonify(response_data), 200
 
 if __name__ == '__main__':
-    app.run(port=8080, debug=True)
+    app.run(port=8000, debug=True)
