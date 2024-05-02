@@ -10,7 +10,7 @@ import os
 from peewee import SqliteDatabase
 from peewee import Model, CharField, IntegerField
 app = Flask(__name__)
-# CORS(app, origins="http://localhost:3000")
+CORS(app, origins="http://localhost:8080")
 app.config['SECRET_KEY'] = "ouioui"
 db = SqliteDatabase('test.db')
 
