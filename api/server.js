@@ -75,13 +75,26 @@ app.post('/auth/login', async (req, res) => {
 
 app.get('/setup', async (req, res) => {
     try {
-        await pool.query('CREATE TABLE users( id SERIAL PRIMARY KEY, name VARCHAR(100), email VARCHAR(100), password VARCHAR(100))')
-        res.status(200).send({message: "Success"})
+        const checkTableQuery = `SELECT EXISTS (
+            SELECT FROM information_schema.tables
+            WHERE table_schema = 'public'
+            AND table_name = 'users'
+        )`;
+
+        const { rows } = await pool.query(checkTableQuery);
+        const tableExists = rows[0].exists;
+
+        if (tableExists) {
+            res.status(200).send({ message: "La table 'users' existe déjà." });
+        } else {
+            await pool.query('CREATE TABLE users( id SERIAL PRIMARY KEY, name VARCHAR(100), email VARCHAR(100), password VARCHAR(100))');
+            res.status(200).send({ message: "La table 'users' a été créée avec succès." });
+        }
     } catch (err) {
-        console.log(err)
-        res.sendStatus(500)
+        console.error(err);
+        res.sendStatus(500);
     }
-})
+});
 
 app.delete('/user/remove', async (req, res) => {
     const { id } = req.body;
