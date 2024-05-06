@@ -9,6 +9,11 @@ const app = express()
 app.use(express.json())
 app.use(cors());
 
+const html = `
+    <h1>Bienvenue sur Spotiflix !</h1>
+    <p>Votre compte a bien été créé, vous pouvez profiter de notre streaming sans limite !</p>
+`
+
 ///routes
 app.get('/', async (req, res) => {
     try {
@@ -41,7 +46,7 @@ app.post('/auth/register', async (req, res) => {
                 to: email,
                 subject: 'Testing',
                 text: "Hello World ?",
-                html: "<b>Bienvenue sur Spotiflix !</b>",
+                html: html,
             });
             res.status(200).send({message: "Success"})
         } else {
