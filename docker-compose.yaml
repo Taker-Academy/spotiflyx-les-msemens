@@ -1,0 +1,18 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: password123
+      POSTGRES_USER: user123
+      POSTGRES_DB: user
+  app:
+    build: ./api
+    ports:
+      - 9000:3000
+    depends_on:
+      - db
+  front:
+    build: ./spotiflix
+    depends_on:
+      - app
