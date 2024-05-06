@@ -54,4 +54,35 @@ app.get('/setup', async (req, res) => {
     }
 })
 
+app.delete('/user/remove', async (req, res) => {
+    const { id } = req.body;
+    try {
+        const result = await pool.query('DELETE FROM users WHERE id = $1', [id]);
+        if (result.rowCount === 1) {
+            res.status(200).send({ message: "User deleted successfully" });
+        } else {
+            res.status(404).send({ message: "User not found" });
+        }
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+})
+
+app.put('/user/edit', async (req, res) => {
+    const { id, oldpassword, newpassword} = req.body;
+    try {
+        const user = await pool.query('SELECT * FROM users WHERE id = $1 AND password = $2', [id, oldpassword]);
+        if (user.rows.length === 1) {
+            await pool.query('UPDATE users SET password = $1 WHERE id = $2', [newpassword, id]);
+            res.status(200).send({ message: "Password updated successfully" });
+        } else {
+            res.status(401).send({ message: "Invalid old password" });
+        }
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+})
+
 app.listen(port, () => console.log(`Server has started on port: ${port}`))
