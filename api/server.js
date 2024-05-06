@@ -1,7 +1,9 @@
 const express = require('express')
 const cors = require('cors');
+const nodeMailer = require('nodemailer')
 const pool = require('./db')
-const port = 3000
+require('dotenv').config();
+const port = process.env.PORT;
 
 const app = express()
 app.use(express.json())
@@ -21,8 +23,30 @@ app.get('/', async (req, res) => {
 app.post('/auth/register', async (req, res) => {
     const { name, email, password } = req.body
     try {
-        await pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, password])
-        res.status(200).send({message: "Success"})
+        const user = await pool.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password]);
+        if (user.rows.length === 0) {
+            await pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, password])
+            const transporter = nodeMailer.createTransport({
+                service: process.env.MAIL_SERVICE,
+                host: process.env.MAIL_HOST,
+                port: process.env.MAIL_PORT,
+                secure: true,
+                auth: {
+                    user: process.env.MAIL_USER,
+                    pass: process.env.MAIL_PASS,
+                },
+            });
+            const info = await transporter.sendMail({
+                from: process.env.MAIL_USER,
+                to: email,
+                subject: 'Testing',
+                text: "Hello World ?",
+                html: "<b>Bienvenue sur Spotiflix !</b>",
+            });
+            res.status(200).send({message: "Success"})
+        } else {
+            res.status(401).send({ message: "Account already exist" });
+        }
     } catch (err) {
         console.log(err)
         res.sendStatus(500)
