@@ -4,6 +4,7 @@ const nodeMailer = require('nodemailer')
 const pool = require('./db')
 const axios = require('axios');
 const SpotifyWebApi = require('spotify-web-api-node')
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const port = process.env.PORT;
 
@@ -41,6 +42,21 @@ const html_edit = `
     <p>Votre mot de passe à bien été changé !</p>
 `
 
+function verifyToken(req, res, next) {
+    const token = req.headers.authorization;
+    if (!token) {
+        return res.status(401).json({ message: 'Token not provided' });
+    }
+
+    jwt.verify(token, 'your_secret_key', (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+        req.userId = decoded.userId; // Récupération de l'ID de l'utilisateur à partir du payload du token
+        next();
+    });
+}
+
 ///routes
 app.get('/', async (req, res) => {
     try {
@@ -57,7 +73,9 @@ app.post('/auth/register', async (req, res) => {
     try {
         const user = await pool.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password]);
         if (user.rows.length === 0) {
-            await pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, password])
+            const newUser = await pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id', [name, email, password])
+            const userId = newUser.rows[0].id;
+            const token = jwt.sign({ userId: userId }, 'your_secret_key', { expiresIn: '1h' });
             const transporter = nodeMailer.createTransport({
                 service: process.env.MAIL_SERVICE,
                 host: process.env.MAIL_HOST,
@@ -75,7 +93,7 @@ app.post('/auth/register', async (req, res) => {
                 text: "Hello World ?",
                 html: html,
             });
-            res.status(200).send({message: "Success"})
+            res.status(200).json({ token: token, message: "User registered successfully" });
         } else {
             res.status(401).send({ message: "Account already exist" });
         }
@@ -123,29 +141,35 @@ app.get('/setup', async (req, res) => {
     }
 });
 
-app.delete('/user/remove', async (req, res) => {
-    const { id, email } = req.body;
+app.delete('/user/remove', verifyToken, async (req, res) => {
+    const userId = req.userId;
     try {
-        const result = await pool.query('DELETE FROM users WHERE id = $1', [id]);
-        if (result.rowCount === 1) {
-            const transporter = nodeMailer.createTransport({
-                service: process.env.MAIL_SERVICE,
-                host: process.env.MAIL_HOST,
-                port: process.env.MAIL_PORT,
-                secure: true,
-                auth: {
-                    user: process.env.MAIL_USER,
-                    pass: process.env.MAIL_PASS,
-                },
-            });
-            const info = await transporter.sendMail({
-                from: process.env.MAIL_USER,
-                to: email,
-                subject: 'Testing',
-                text: "Hello World ?",
-                html: html_remove,
-            });
-            res.status(200).send({ message: "User deleted successfully" });
+        const user = await pool.query('SELECT email FROM users WHERE id = $1', [userId]);
+        if (user.rows.length === 1) {
+            const email = user.rows[0].email;
+            const result = await pool.query('DELETE FROM users WHERE id = $1', [userId]);
+            if (result.rowCount === 1) {
+                const transporter = nodeMailer.createTransport({
+                    service: process.env.MAIL_SERVICE,
+                    host: process.env.MAIL_HOST,
+                    port: process.env.MAIL_PORT,
+                    secure: true,
+                    auth: {
+                        user: process.env.MAIL_USER,
+                        pass: process.env.MAIL_PASS,
+                    },
+                });
+                const info = await transporter.sendMail({
+                    from: process.env.MAIL_USER,
+                    to: email,
+                    subject: 'Testing',
+                    text: "Hello World ?",
+                    html: html_remove,
+                });
+                res.status(200).send({ message: "User deleted successfully" });
+            } else {
+                res.status(404).send({ message: "User not found" });
+            }
         } else {
             res.status(404).send({ message: "User not found" });
         }
@@ -153,14 +177,16 @@ app.delete('/user/remove', async (req, res) => {
         console.error(err);
         res.sendStatus(500);
     }
-})
+});
 
-app.put('/user/edit', async (req, res) => {
-    const { id, oldpassword, newpassword, email} = req.body;
+app.put('/user/edit', verifyToken, async (req, res) => {
+    const userId = req.userId;
+    const { oldpassword, newpassword } = req.body;
     try {
-        const user = await pool.query('SELECT * FROM users WHERE id = $1 AND password = $2', [id, oldpassword]);
+        const user = await pool.query('SELECT email FROM users WHERE id = $1 AND password = $2', [userId, oldpassword]);
         if (user.rows.length === 1) {
-            await pool.query('UPDATE users SET password = $1 WHERE id = $2', [newpassword, id]);
+            const email = user.rows[0].email;
+            await pool.query('UPDATE users SET password = $1 WHERE id = $2', [newpassword, userId]);
             const transporter = nodeMailer.createTransport({
                 service: process.env.MAIL_SERVICE,
                 host: process.env.MAIL_HOST,
@@ -187,13 +213,12 @@ app.put('/user/edit', async (req, res) => {
         console.error(err);
         res.sendStatus(500);
     }
-})
+});
 
 app.get('/youtube/search', async (req, res) => {
     try {
         const apiKey = process.env.API_KEY;
         const { search } = req.body;
-        // Construire l'URL de l'API YouTube
         const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${search}&type=video&part=snippet`;
         const response = await axios.get(url);
         res.status(200).json(response.data);
