@@ -108,7 +108,9 @@ app.post('/auth/login', async (req, res) => {
     try {
         const user = await pool.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password]);
         if (user.rows.length === 1) {
-            res.status(200).send({ message: "Login successful" });
+            const userId = user.rows[0].id;
+            const token = jwt.sign({ userId: userId }, process.env.SECRET_KEY, { expiresIn: '1h' });
+            res.status(200).json({ token: token, message: "Login successfully" });
         } else {
             res.status(401).send({ message: "Invalid email or password" });
         }
