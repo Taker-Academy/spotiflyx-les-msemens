@@ -48,11 +48,11 @@ function verifyToken(req, res, next) {
         return res.status(401).json({ message: 'Token not provided' });
     }
 
-    jwt.verify(token, 'your_secret_key', (err, decoded) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
         if (err) {
             return res.status(401).json({ message: 'Invalid token' });
         }
-        req.userId = decoded.userId; // Récupération de l'ID de l'utilisateur à partir du payload du token
+        req.userId = decoded.userId;
         next();
     });
 }
@@ -75,7 +75,7 @@ app.post('/auth/register', async (req, res) => {
         if (user.rows.length === 0) {
             const newUser = await pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id', [name, email, password])
             const userId = newUser.rows[0].id;
-            const token = jwt.sign({ userId: userId }, 'your_secret_key', { expiresIn: '1h' });
+            const token = jwt.sign({ userId: userId }, process.env.SECRET_KEY, { expiresIn: '1h' });
             const transporter = nodeMailer.createTransport({
                 service: process.env.MAIL_SERVICE,
                 host: process.env.MAIL_HOST,
