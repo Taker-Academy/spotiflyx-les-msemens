@@ -6,6 +6,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'Home',
   component: {
@@ -28,6 +29,7 @@ export default {
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        color: #fff;
     }
     .welcome h1 {
         font-size: 70px;

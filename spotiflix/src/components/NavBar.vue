@@ -3,14 +3,14 @@
       <router-link to="/">
         <img class="logo" src="@/assets/logo.png" alt="logo-spotiflix">
       </router-link>
-      <account>
+      <div>
         <router-link to="/login">
           <button class="login">Sign in</button>
         </router-link>
         <router-link to="/register">
           <button class="login">Register</button>
         </router-link>
-      </account>
+      </div>
     </div>
 </template>
 

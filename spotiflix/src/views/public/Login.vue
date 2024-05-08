@@ -15,8 +15,11 @@
 <script>
 import axios from 'axios';
 
+
 export default {
   name: 'Login',
+  components: {
+  },
   data(){
     return {
         user: {
@@ -28,16 +31,24 @@ export default {
   methods: {
     login() {
       console.log("Tentative de connexion");
-      axios.post('localhost:8000/auth/login', this.user)
-        .then(response => {
+      axios.post('http://localhost:9000/auth/login', this.user)
+      .then(response => {
           console.log('Connexion réussie:', response);
-          this.$router.push('/');
+          console.log(response.data.token);
+          localStorage.setItem('token', response.data.token);
+          this.$router.push('/logged'); // Rediriger vers la route après connexion
         })
         .catch(error => {
           console.error('Erreur de connexion:', error);
         });
     }
-  }
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    if(token) {
+      axios.defaults.headers.common['Authorization'] = token;
+    }
+  },
 }
 </script>
 
@@ -54,10 +65,13 @@ export default {
     .input label {
         font-family: iconso, sans-serif;
         font-size: 28px;
+        font-weight: 600;
         margin: 10px 25px;
+        color: #fff;
     }
     .input input {
-        width: 19rem;
+        width: 20rem;
+        height: 1.5rem;
         border: 3px solid grey;
         border-radius: 50px;
     }
@@ -69,11 +83,12 @@ export default {
         justify-content: center;
     }
     button {
-        padding: 7px 15px;
+        padding: 8px 15px;
         width: 7rem;
         border-radius: 50px;
-        font-size: 16.5px;
+        font-size: 20px;
         font-weight: 600;
+        margin: 10px 25px;
         font-family: iconso, sans-serif;
         border: 3px solid grey;
     }

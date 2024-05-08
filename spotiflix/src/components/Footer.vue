@@ -26,7 +26,7 @@ export default {
         display: flex;
         justify-content: space-around;
         padding: 4rem;
-        color: black;
+        color: #fff;
     }
     .row {
         display: flex;
