@@ -145,11 +145,12 @@ app.get('/setup', async (req, res) => {
 
 app.delete('/user/remove', verifyToken, async (req, res) => {
     const userId = req.userId;
+    const { password } = req.body;
     try {
         const user = await pool.query('SELECT email FROM users WHERE id = $1', [userId]);
         if (user.rows.length === 1) {
             const email = user.rows[0].email;
-            const result = await pool.query('DELETE FROM users WHERE id = $1', [userId]);
+            const result = await pool.query('DELETE FROM users WHERE id = $1 AND password = $2', [userId, password]);
             if (result.rowCount === 1) {
                 const transporter = nodeMailer.createTransport({
                     service: process.env.MAIL_SERVICE,
