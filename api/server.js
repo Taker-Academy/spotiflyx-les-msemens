@@ -246,4 +246,22 @@ app.get('/spotify/search', async (req, res) => {
     }
 });
 
+app.get('/user/me', verifyToken, async (req, res) => {
+    const userId = req.userId;
+    try {
+        const user = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
+        if (user.rows.length === 1) {
+            const email = user.rows[0].email;
+            const password = user.rows[0].password;
+            const name = user.rows[0].name;
+            res.status(200).json({ name: name, email: email, password: password });
+        } else {
+            res.status(401).send({ message : "User not found" });
+        }
+    } catch (err) {
+        console.log(err)
+        res.sendStatus(500)
+    }
+});
+
 app.listen(port, () => console.log(`Server has started on port: ${port}`))
