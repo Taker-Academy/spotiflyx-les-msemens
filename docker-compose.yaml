@@ -3,9 +3,13 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: password123
-      POSTGRES_USER: user123
-      POSTGRES_DB: user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/api_psswrd
+      - POSTGRES_USER_FILE=/run/secrets/api_user
+      - POSTGRES_DB_FILE=/run/secrets/api_db
+    secrets:
+      - api_psswrd
+      - api_user
+      - api_db
   app:
     build: ./api
     ports:
@@ -16,3 +20,10 @@ services:
     build: ./spotiflix
     depends_on:
       - app
+secrets:
+  api_psswrd:
+    file: ./api/secrets/api_psswrd.txt
+  api_user:
+    file: ./api/secrets/api_user.txt
+  api_db:
+    file: ./api/secrets/api_db.txt
