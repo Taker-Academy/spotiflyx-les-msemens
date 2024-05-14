@@ -8,6 +8,8 @@ import Login from '@/views/public/Login.vue'
 import Register from '@/views/public/Register.vue'
 import LoggedLayout from '@/views/logged/LoggedLayout'
 
+import mainMenu from '@/views/logged/mainMenu.vue';
+
 const routes = [
 
   {
@@ -25,6 +27,7 @@ const routes = [
     name: 'Logged',
     component: LoggedLayout,
     children: [
+      { path: '/logged', name: 'MainMenu', component: mainMenu },
 
     ]
   },

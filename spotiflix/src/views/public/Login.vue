@@ -39,7 +39,7 @@ export default {
           this.$router.push('/logged'); // Rediriger vers la route après connexion
         })
         .catch(error => {
-          console.error('Erreur de connexion:', error);
+          alert('Erreur de connexion');
         });
     }
   },

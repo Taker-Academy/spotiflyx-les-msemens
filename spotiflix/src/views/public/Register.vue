@@ -42,7 +42,7 @@ export default {
           this.$router.push('/logged');
         })
       .catch(error => {
-          console.error('Erreur lors de l’enregistrement:', error);
+          alert('Erreur lors de l’enregistrement');
         });
     }
   },

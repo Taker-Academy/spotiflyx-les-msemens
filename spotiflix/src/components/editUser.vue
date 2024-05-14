@@ -1,16 +1,13 @@
 <template>
     <form @submit.prevent="EditUser" class="edit">
-        <div class="input">
-            <label for="user_email">Email</label>
-            <input v-model="user.email" type="email" required>
-        </div>
+        <h2>Change password</h2>
         <div class="input">
             <label for="user_password">Old Password</label>
-            <input v-model="user.oldpassword" type="password" required>
+            <input v-model="user.oldpassword" type="password" placeholder="caca20" required>
         </div>
         <div class="input">
             <label for="user_password">New Password</label>
-            <input v-model="user.newpassword" type="password" required>
+            <input v-model="user.newpassword" type="password" placeholder="caca1" required>
         </div>
         <button type="submit">submit</button>
     </form>
@@ -24,7 +21,6 @@ export default {
     data(){
         return {
             user: {
-                email: '',
                 oldpassword: '',
                 newpassword: ''
             }
@@ -62,6 +58,11 @@ export default {
     .input {
         margin: 1rem;
         color: black;
+    }
+    h2 {
+        font-family: iconso, sans-serif;
+        font-size: 28px;
+        font-weight: 600;
     }
     .input label {
         font-family: iconso, sans-serif;

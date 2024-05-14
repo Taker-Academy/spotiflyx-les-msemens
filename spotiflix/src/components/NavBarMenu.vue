@@ -1,12 +1,12 @@
 <template>
         <div class="navbar">
-      <router-link to="/">
+      <router-link to="/logged">
         <img class="logo" src="@/assets/logo.png" alt="logo-spotiflix">
       </router-link>
       <ModaleUserMenu v-bind:clicked="clicked" v-bind:toggleModale="toggleModale"/>
       <div>
           <button v-on:click="toggleModale" class="login">Settings</button>
-          <button v-on:click="Logout" class="login">Logout</button>
+          <button v-on:click="Logout" class="logout login">Logout</button>
       </div>
     </div>
 </template>
@@ -58,5 +58,9 @@ export default {
     font-weight: 600;
     border: 2px solid grey;
     margin: 0px 1rem;
+  }
+  .logout:hover {
+    background: rgb(234, 75, 75);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.479);
   }
 </style>
