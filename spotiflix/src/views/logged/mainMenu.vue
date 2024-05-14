@@ -48,7 +48,6 @@ export default {
   methods: {
     searchQuery() {
       console.log('Searching for:', this.user.search);
-      if (!this.user.search) return;
       axios.post('http://localhost:9000/youtube/search', this.user)
         .then(response => {
           console.log('Response received:', response.data.items);
