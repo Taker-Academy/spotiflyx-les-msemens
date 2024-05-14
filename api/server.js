@@ -218,7 +218,7 @@ app.put('/user/edit', verifyToken, async (req, res) => {
     }
 });
 
-app.get('/youtube/search', async (req, res) => {
+app.post('/youtube/search', async (req, res) => {
     try {
         const apiKey = process.env.API_KEY;
         const { search } = req.body;
