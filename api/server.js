@@ -231,7 +231,7 @@ app.post('/youtube/search', async (req, res) => {
     }
 });
 
-app.get('/spotify/search', async (req, res) => {
+app.post('/spotify/search', async (req, res) => {
     const { search } = req.body;
     try {
         const data = await spotifyApi.clientCredentialsGrant();
