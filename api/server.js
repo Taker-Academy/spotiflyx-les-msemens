@@ -28,18 +28,51 @@ spotifyApi.clientCredentialsGrant()
     });
 
 const html = `
-    <h1>Bienvenue sur Spotiflix !</h1>
-    <p>Votre compte a bien été créé, vous pouvez profiter de notre streaming sans limite !</p>
+    <div style="background-color: #f4f4f4; padding: 20px;">
+        <h2 style="color: #333;">🎉 Confirmation d'Inscription 🎉</h2>
+        <p>Merci de vous être inscrit ! Nous sommes ravis de vous accueillir dans notre communauté.</p>
+    </div>
+
+    <div style="padding: 20px;">
+        <p>Votre inscription est confirmée. Vous êtes désormais prêt à découvrir des tonnes de vidéos et de musique sur notre site.</p>
+    </div>
+
+    <div style="background-color: #333; color: #fff; padding: 10px; text-align: center;">
+        <p style="margin: 0;">Ceci est un email automatique. Merci de ne pas y répondre. 😊</p>
+    </div>
 `
 
 const html_remove = `
-    <h1>Votre compte à bien été supprimé !</h1>
-    <p>Aurevoir, j'imagine que notre site n'était pas assez complet...</p>
+    <div style="background-color: #f4f4f4; padding: 20px;">
+        <h2 style="color: #333;">😢 Confirmation de Suppression de Compte 😢</h2>
+        <p>Nous sommes attristés de vous voir partir. Votre compte a été supprimé avec succès.</p>
+    </div>
+
+    <div style="padding: 20px;">
+        <p>Nous espérons avoir répondu à vos attentes. Si vous changez d'avis, n'hésitez pas à revenir nous voir à tout moment.</p>
+    </div>
+
+    <div style="background-color: #333; color: #fff; padding: 10px; text-align: center;">
+        <p style="margin: 0;">Ceci est un email automatique. Merci de ne pas y répondre. 😔</p>
+    </div>
+
+</body>
 `
 
 const html_edit = `
-    <h1>Votre mot de passe à changer !</h1>
-    <p>Votre mot de passe à bien été changé !</p>
+    <div style="background-color: #f4f4f4; padding: 20px;">
+        <h2 style="color: #333;">🔒 Confirmation de Modification de Mot de Passe 🔒</h2>
+        <p>Votre mot de passe a été modifié avec succès.</p>
+    </div>
+
+    <div style="padding: 20px;">
+        <p>Si vous n'avez pas demandé cette modification, veuillez nous contacter immédiatement pour sécuriser votre compte.</p>
+    </div>
+
+    <div style="background-color: #333; color: #fff; padding: 10px; text-align: center;">
+        <p style="margin: 0;">Ceci est un email automatique. Merci de ne pas y répondre. 🔐</p>
+    </div>
+
 `
 
 function verifyToken(req, res, next) {
