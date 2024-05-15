@@ -6,6 +6,7 @@ const axios = require('axios');
 const SpotifyWebApi = require('spotify-web-api-node')
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
 const port = process.env.PORT;
 
 const app = express()
@@ -122,8 +123,8 @@ app.post('/auth/register', async (req, res) => {
             const info = await transporter.sendMail({
                 from: process.env.MAIL_USER,
                 to: email,
-                subject: 'Testing',
-                text: "Hello World ?",
+                subject: 'Bienvenue !',
+                text: "Confirmation d'inscription",
                 html: html,
             });
             res.status(200).json({ token: token, message: "User registered successfully" });
@@ -198,8 +199,8 @@ app.delete('/user/remove', verifyToken, async (req, res) => {
                 const info = await transporter.sendMail({
                     from: process.env.MAIL_USER,
                     to: email,
-                    subject: 'Testing',
-                    text: "Hello World ?",
+                    subject: 'Suppression de compte',
+                    text: "Aurevoir...",
                     html: html_remove,
                 });
                 res.status(200).send({ message: "User deleted successfully" });
@@ -236,8 +237,8 @@ app.put('/user/edit', verifyToken, async (req, res) => {
             const info = await transporter.sendMail({
                 from: process.env.MAIL_USER,
                 to: email,
-                subject: 'Testing',
-                text: "Hello World ?",
+                subject: 'Mot de passe changé !',
+                text: "Bien changé !",
                 html: html_edit,
             });
 
