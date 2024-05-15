@@ -24,6 +24,7 @@
     <div class="empty" v-else>
       <p>Aucune réponse trouvée</p>
     </div>
+    <div v-if="responses.length == 0" class="nothing"></div>
 </template>
 
 <script>
@@ -63,6 +64,9 @@ export default {
 a {
   text-decoration: none;
   color: black;
+}
+.nothing {
+  height: 80vh;
 }
 .chaine:hover {
   transform: rotate(180deg);
