@@ -13,6 +13,9 @@
                 <input v-model="user.password" type="password" required>
             </div>
             <button type="submit">submit</button>
+            <div id="notification" class="hidden">
+                Bienvenue sur spotiflix
+            </div>
         </form>
 </template>
 
@@ -33,13 +36,24 @@ export default {
     }
   },
   methods: {
+    showNotification() {
+      var notification = document.getElementById('notification');
+      notification.classList.remove('hidden');
+      notification.classList.add('visible');
+
+      setTimeout(() => {
+        notification.classList.remove('visible');
+        notification.classList.add('hidden');
+        this.$router.push('/logged');
+      }, 2000);
+    },
     register() {
       console.log("Tentative de connexion");
       axios.post('http://localhost:9000/auth/register', this.user)
       .then(response => {
           console.log('Connexion réussie:', response);
           localStorage.setItem('token', response.data.token);
-          this.$router.push('/logged');
+          this.showNotification();
         })
       .catch(error => {
           alert('Erreur lors de l’enregistrement');
@@ -61,6 +75,22 @@ export default {
     @font-face {
         font-family: 'iconso';
         src: url('@/assets/Inconsolata.ttf') format('truetype'),
+    }
+    #notification {
+      position: fixed;
+      top: 1%;
+      left: 50%;
+      scale: 1.4;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      z-index: 1000;
+      transition: top 0.5s ease;
+    }
+    .hidden {
+        display: none;
     }
     .input {
         margin: 1rem;

@@ -57,6 +57,11 @@ a {
   text-decoration: none;
   color: black;
 }
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .content{
     height: 100vh;
 }

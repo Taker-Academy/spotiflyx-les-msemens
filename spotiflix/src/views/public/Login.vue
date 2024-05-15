@@ -10,6 +10,9 @@
             </div>
             <button type="submit">submit</button>
         </form>
+        <div id="notification" class="hidden">
+          Bienvenue sur spotiflix
+        </div>
 </template>
 
 <script>
@@ -29,6 +32,17 @@ export default {
     }
   },
   methods: {
+    showNotification() {
+      var notification = document.getElementById('notification');
+      notification.classList.remove('hidden');
+      notification.classList.add('visible');
+
+      setTimeout(() => {
+        notification.classList.remove('visible');
+        notification.classList.add('hidden');
+        this.$router.push('/logged');
+      }, 2000);
+    },
     login() {
       console.log("Tentative de connexion");
       axios.post('http://localhost:9000/auth/login', this.user)
@@ -36,7 +50,7 @@ export default {
           console.log('Connexion réussie:', response);
           console.log(response.data.token);
           localStorage.setItem('token', response.data.token);
-          this.$router.push('/logged'); // Rediriger vers la route après connexion
+          this.showNotification();
         })
         .catch(error => {
           alert('Erreur de connexion');
@@ -57,6 +71,22 @@ export default {
     @font-face {
         font-family: 'iconso';
         src: url('@/assets/Inconsolata.ttf') format('truetype'),
+    }
+    #notification {
+      position: fixed;
+      top: 1%;
+      left: 50%;
+      scale: 1.4;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      z-index: 1000;
+      transition: top 0.5s ease;
+    }
+    .hidden {
+        display: none;
     }
     .input {
         margin: 1rem;
