@@ -145,7 +145,7 @@ app.get('/setup', async (req, res) => {
 
 app.delete('/user/remove', verifyToken, async (req, res) => {
     const userId = req.userId;
-    const { password } = req.headers.Password;
+    const password = req.headers['password'];
     try {
         const user = await pool.query('SELECT email FROM users WHERE id = $1', [userId]);
         if (user.rows.length === 1) {
