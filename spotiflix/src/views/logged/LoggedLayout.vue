@@ -15,7 +15,5 @@ export default {
 </script>
 
 <style scoped>
-    .content{
-        height: 100vh;
-    }
+
 </style>

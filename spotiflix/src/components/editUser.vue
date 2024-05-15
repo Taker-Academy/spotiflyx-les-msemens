@@ -3,11 +3,11 @@
         <h2>Change password</h2>
         <div class="input">
             <label for="user_password">Old Password</label>
-            <input v-model="user.oldpassword" type="password" placeholder="caca20" required>
+            <input v-model="user.oldpassword" type="password" required>
         </div>
         <div class="input">
             <label for="user_password">New Password</label>
-            <input v-model="user.newpassword" type="password" placeholder="caca1" required>
+            <input v-model="user.newpassword" type="password" required>
         </div>
         <button type="submit">submit</button>
     </form>
@@ -100,6 +100,6 @@ export default {
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        height: 65vh;
+        height: 30rem;
     }
 </style>

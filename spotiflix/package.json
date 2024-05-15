@@ -9,9 +9,6 @@
   },
   "dependencies": {
     "@chakra-ui/vue": "^0.13.1",
-    "@chakra-ui/vue-next": "^1.0.0-alpha.16",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
@@ -19,6 +16,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "axios": "^1.6.8",
     "core-js": "^3.8.3",
+    "element-plus": "^2.7.3",
     "emotion": "^10.0.27",
     "framer-motion": "^11.1.9",
     "vue": "^3.2.13",

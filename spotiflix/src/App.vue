@@ -31,7 +31,6 @@ export default {
 }
 </script>
 
-
 <style>
 body {
   margin: 0;
@@ -42,17 +41,17 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
 }
 #app::before {
-  content: "";  /* necessary for pseudo-elements */
-  position: fixed;  /* fixed or absolute depending on your layout */
+  content: "";
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;  /* positions it behind the content */
-  background-image: url('./assets/background1.jpg'); /* path to your image */
-  background-size: cover;  /* ensures the background covers the entire element */
-  background-position: center;  /* centers the background */
-  filter: brightness(50%);  /* adjust brightness as needed */
+  z-index: -1;
+  background-image: url('./assets/background1.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: brightness(50%);
 }
 </style>
 

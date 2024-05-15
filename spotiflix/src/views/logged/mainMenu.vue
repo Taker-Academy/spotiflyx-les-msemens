@@ -1,47 +1,40 @@
 <template>
   <div>
-    <form class="search" @submit.prevent="searchQuery">
-      <div class="keep">
-        <input class="query" type="text" v-model="user.search" placeholder="Search...">
-        <button class="button" type="submit">
-          <font-awesome-icon icon="search" />
-        </button>
-      </div>
-    </form>
-    <div class="response" v-if="responses.length >= 0">
-      <div class="" v-for="response in responses" :key="response.id.videoId">
-        <div class="video_case">
-          <a :href="`https://www.youtube.com/watch?v=${response.id.videoId}`" target="_blank">
-            <img :src="response.snippet.thumbnails.medium.url" alt="">
-          </a>
-          <div class="snippet">
-            <h4>Titre: {{ response.snippet.title }}</h4>
-            <h4>Description: " {{ response.snippet.description }} "</h4>
-            <a :href="`https://www.youtube.com/channel/${response.snippet.channelId}`" target="_blank">
-              <h4>Chaine: {{ response.snippet.channelTitle }}</h4>
-            </a>
-          </div>
-        </div>
-      </div>
+    <div class="choose">
+      <el-switch
+      v-model="value1"
+      class="ml-2"
+      size='large'
+      inline-prompt
+      style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+      active-text="Spotify"
+      inactive-text="Youtube"
+      />
     </div>
-    <div class="empty" v-else>
-      <p>Aucune réponse trouvée</p>
-    </div>
+    <searchYoutubeVue v-if="!value1"/>
+    <searchSpotifyVue v-else/>
+
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import searchYoutubeVue from '../../components/searchYoutube.vue';
+import { ref } from 'vue'
+import searchSpotifyVue from '../../components/searchSpotify.vue';
 
 export default {
   name: 'searchBar',
   components: {
+    searchYoutubeVue,
+    searchSpotifyVue
   },
   data() {
     return {
       user: {
         search: ''
       },
+      spotify: true,
       responses: []
     };
   },
@@ -58,90 +51,22 @@ export default {
           alert('Erreur de recherche');
         });
     }
+  },
+  setup() {
+    const value1 = ref(true);
+
+    return { value1 };
   }
 };
 </script>
 
 <style scoped>
-a {
-  text-decoration: none;
-  color: black;
-}
-.content{
-    height: 100vh;
-}
-.search {
+.choose {
   display: flex;
-  align-content: center;
   justify-content: center;
-  height: auto;
+  align-items: center;
 }
-.button, .query {
-  background: transparent;
-  height: auto;
-}
-.keep {
-  background: #00000074;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  height: 3.5rem;
-  border-radius: 50px;
-}
-.query {
-  width: 12rem;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 50px;
-  color: #fff;
-}
-.button {
-  border: none;
-  padding: 1rem 2rem;
-  scale: 1.4;
-  border-radius: 50px;
-  color: #fff;
-  cursor: pointer;
-}
-.response {
+.choose h3{
   margin: 1rem;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-.button:hover {
-  scale: 1.6;
-}
-img {
-  margin: 1rem;
-}
-.video_case {
-  display: flex;
-  align-items: center;
-  height: 15rem;
-  justify-content: left;
-  background: #272727;
-  margin-top: 1.5rem;
-  width: 60vw;
-  padding: 0rem 2rem;
-  border-radius: 20px;
-  transition: transform 0.3s ease; /* Ajout de la transition */
-}
-
-.snippet * {
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-}
-
-.empty {
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.video_case:hover {
-  transform: scale(1.1); /* Utilisation de transform au lieu de scale */
 }
 </style>

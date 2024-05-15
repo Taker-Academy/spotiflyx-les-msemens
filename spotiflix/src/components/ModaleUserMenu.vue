@@ -3,6 +3,7 @@
         <div class="overlay" v-on:click="toggleModale"></div>
         <div class="modale card">
             <div v-on:click="toggleModale" class="btn-modale ">Close</div>
+                <h2>Email: {{ user.email }}</h2>
                 <div class="acc">
                     <EditUser/>
                     <form @submit.prevent="DeleteAccount" class="del input">
@@ -28,13 +29,15 @@ export default {
     data(){
         return {
             user: {
+                email: '',
                 password: '',
             }
         }
     },
-    // mounted() {
-    //     // const user = this.GetUser();
-    // },
+
+    mounted() {
+        this.GetUser();
+    },
     // data(){
     //     return {
     //         user: {
@@ -47,29 +50,36 @@ export default {
     methods: {
         DeleteAccount() {
             console.log("Token utilisé:", localStorage.getItem('token'));
+            console.log(this.user);
             axios.delete('http://localhost:9000/user/remove', {
                 headers: {
-                    'Authorization': localStorage.getItem('token')
+                    Authorization: `${localStorage.getItem('token')}`
+                },
+                data: {
+                    password: this.user.password
                 }
             })
             .then(response => {
                 console.log('Compte supprimé:', response.data);
                 localStorage.removeItem('token');
-                this.$router.push('/')
+                this.$router.push('/');
             })
             .catch(error => {
                 console.error('Erreur lors de la suppression:', error);
             });
+        },
+        GetUser() {
+            axios.get('http://localhost:9000/user/me',{
+                headers: {
+                    Authorization: `${localStorage.getItem('token')}`
+            }})
+            .then(response => {
+                this.user.email = response.data.email;
+            })
+            .catch(error => {
+            console.error('Erreur lors de l\'initialisation de la base de données:', error);
+            });
         }
-    //   GetUser() {
-    //     axios.get('http://localhost:9000/user/me')
-    //     .then(response => {
-    //       return response.data
-    //     })
-    //     .catch(error => {
-    //       console.error('Erreur lors de l\'initialisation de la base de données:', error);
-    //     });
-    //   }
     },
 }
 </script>
@@ -87,12 +97,13 @@ h2 {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 65vh;
+    height: auto;
 }
 .acc {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    height: auto;
 }
 .input {
     margin: 1rem;
@@ -135,6 +146,7 @@ button {
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 5;
   display: flex;
   justify-content: center;
   align-items: center;
